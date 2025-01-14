@@ -1,8 +1,34 @@
 import React from "react";
+import { useState, useEffect } from "react";
 
 import styles from "./SubmissionForm.module.css";
 
 const SubmissionForm: React.FC = () => {
+    const [formValues, setFormValue] = useState({
+        email: "",
+        fullname: "",
+        password: "",
+        get_notif: false,
+    });
+
+    const handlerSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+    };
+    const handlerInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const currentValue = e.target.value;
+        const currentID = e.target.id;
+
+        setFormValue(prev => ({ ...prev, [currentID]: currentValue }));
+        if (currentID === "email") {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const isValidEmail = emailRegex.test(currentValue);
+            if (isValidEmail) { e.target.classList.remove(styles.error); }
+            else { e.target.classList.add(styles.error); };
+        } else if (currentID === "password") {
+            if (currentValue.length < 6) { e.target.classList.add(styles.error); }
+            else { e.target.classList.remove(styles.error); };
+        };
+    };
 
     return (
         <div className={styles.submissionForm}>
@@ -49,22 +75,49 @@ const SubmissionForm: React.FC = () => {
             <div className={styles.signinForm}>
                 <h2>Create your account</h2>
                 <form action="POST">
-                    <label htmlFor="email-address" className={styles.signinItem}>Email
-                        <input className={styles.signinItemInput} type="text" id="email-address" placeholder="Enter your email address" />
+                    <label htmlFor="email" className={styles.signinItem}>Email
+                        <input
+                            className={styles.signinItemInput}
+                            type="text"
+                            id="email"
+                            placeholder="Enter your email address"
+                            onChange={handlerInputChanged}
+                            value={formValues.email}
+                        />
                     </label>
                     <label htmlFor="fullname" className={styles.signinItem}>Full name
-                        <input className={styles.signinItemInput} type="text" id="fullname" placeholder="Enter your full name" />
+                        <input
+                            className={styles.signinItemInput}
+                            type="text"
+                            id="fullname"
+                            placeholder="Enter your full name"
+                            onChange={handlerInputChanged}
+                            value={formValues.fullname}
+                        />
                     </label>
                     <label htmlFor="password" className={styles.signinItem}>Password
-                        <input className={styles.signinItemInput} type="text" id="password" placeholder="Type to create a password" />
+                        <input
+                            className={styles.signinItemInput}
+                            type="password"
+                            id="password"
+                            placeholder="Type to create a password"
+                            onChange={handlerInputChanged}
+                            value={formValues.password}
+                        />
                     </label>
                     <div className={`${styles.signinItem} ${styles.getNotif}`}>
+                        <input
+                            className={styles.signinItemInput}
+                            type="checkbox"
+                            id="notification"
+                            onChange={e => setFormValue(prev => ({ ...prev, get_notif: e.target.checked }))}
+                            checked={formValues.get_notif}
+                        />
                         <label htmlFor="notification" className={styles.signinItem}>
-                            <input className={styles.signinItemInput} type="checkbox" id="notification" />
                             Get updates and notifications about our product.
                         </label>
                     </div>
-                    <button type="submit" className={styles.submitBtn}>Type to create a password</button>
+                    <button type="submit" className={styles.submitBtn} onClick={handlerSubmit}>Type to create a password</button>
                 </form>
             </div>
         </div>
