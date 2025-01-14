@@ -14,5 +14,7 @@ html {
 }
 
 .container {
-    background-color: rgba(128, 128, 128, .1);
+    /* width: 100wh;
+    height: 100vh; */
+    /* background-color: rgba(128, 128, 128, .1); */
 }
