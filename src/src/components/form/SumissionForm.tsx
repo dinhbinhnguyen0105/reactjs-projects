@@ -6,7 +6,7 @@ const SubmissionForm: React.FC = () => {
 
     return (
         <div className={styles.submissionForm}>
-            <h2>Submission form</h2>
+            <div className="intro"></div>
         </div>
     );
 }
